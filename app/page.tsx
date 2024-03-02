@@ -1,14 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import ExpandingArrow from '@/components/expanding-arrow'
-import Uploader from '@/components/uploader'
-import TranscriptComponent from '@/components/transcripts'
 import { Toaster } from '@/components/toaster'
-import Player from '@/components/player'
-import VideoPlayer from '../components/player';
+import dynamic from 'next/dynamic';
+
+const VideoPlayer = dynamic(
+  () => import('../components/player'),
+  { ssr: false }
+);
+
 
 const videoUrl = "https://vod-cdn.lp-playback.studio/raw/jxf4iblf6wlsyor6526t4tcmtmqa/catalyst-vod-com/hls/aa49jf2uijrtct3e/index.m3u8"
 export default function Home() {
