@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Toaster } from '@/components/toaster'
 import dynamic from 'next/dynamic';
+import Uploader from '@/components/uploader';
 
 const VideoPlayer = dynamic(
   () => import('../components/player'),
@@ -13,6 +14,8 @@ const VideoPlayer = dynamic(
 const videoUrl = "https://vod-cdn.lp-playback.studio/raw/jxf4iblf6wlsyor6526t4tcmtmqa/catalyst-vod-com/hls/aa49jf2uijrtct3e/index.m3u8"
 export default function Home() {
   const [transcript, setTranscript] = useState<any>(null);
+  const [videoLink, setVideoLink] = useState<any>(null);
+  const [title, setTitle] = useState<string | null>('');
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch('/api/transcript', {
@@ -37,29 +40,34 @@ export default function Home() {
       <h1 className="pt-4 pb-8 bg-gradient-to-br from-black via-[#171717] to-[#575757] bg-clip-text text-4xl font-medium tracking-tight text-transparent md:text-4xl">
         Sentient Scribe AI
       </h1>
-      <div className="flex">
-        <div style={{display: "contents"}} className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg w-full">
-          <VideoPlayer src={videoUrl}/>
+      {!videoLink && 
+        <div className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg w-xl">
+          <Uploader setVideoLink={setVideoLink} setVideoTitle={setTitle}/>
         </div>
-      </div>
-      <h2 style={{fontWeight: "600"}}>Summary</h2>
-      <p style={{paddingLeft: '50px', paddingRight: '50px', }}className="font-light text-gray-600 w-full text-start">
-        {/* <Link
-          href="https://vercel.com/blob"
-          className="font-medium underline underline-offset-4 hover:text-black transition-colors"
-        >
-          Vercel Blob
-        </Link>{' '}
-        demo. Built with{' '}
-        <Link
-          href="https://nextjs.org/docs"
-          className="font-medium underline underline-offset-4 hover:text-black transition-colors"
-        >
-          Next.js App Router
-        </Link>
-        . */}
-        {transcript && transcript.summary.shorthand_bullet}
-      </p>
+      }
+      {videoLink && 
+        <><div className="flex">
+          <div style={{ display: "contents" }} className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg w-full">
+            <VideoPlayer src={videoUrl} />
+          </div>
+        </div><h2 style={{ fontWeight: "600" }}>Summary</h2><p style={{ paddingLeft: '50px', paddingRight: '50px', }} className="font-light text-gray-600 w-full text-start">
+            {/* <Link
+      href="https://vercel.com/blob"
+      className="font-medium underline underline-offset-4 hover:text-black transition-colors"
+    >
+      Vercel Blob
+    </Link>{' '}
+    demo. Built with{' '}
+    <Link
+      href="https://nextjs.org/docs"
+      className="font-medium underline underline-offset-4 hover:text-black transition-colors"
+    >
+      Next.js App Router
+    </Link>
+    . */}
+            {transcript && transcript.summary.shorthand_bullet}
+          </p></>
+      }
       {/* <div className="sm:absolute sm:bottom-0 w-full px-20 py-10 flex justify-between">
         <Link href="https://vercel.com">
           <Image

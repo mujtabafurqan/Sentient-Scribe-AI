@@ -5,13 +5,14 @@ import toast from 'react-hot-toast'
 import LoadingDots from './loading-dots'
 import { PutBlobResult } from '@vercel/blob'
 
-export default function Uploader() {
+export default function Uploader({ setVideoLink, setVideoTitle}) {
   const [data, setData] = useState<{
     image: string | null
   }>({
     image: null,
   })
   const [file, setFile] = useState<File | null>(null)
+  const [title, setTitle] = useState<string | null>('')
 
   const [dragActive, setDragActive] = useState(false)
 
@@ -53,6 +54,11 @@ export default function Uploader() {
         }).then(async (res) => {
           if (res.status === 200) {
             const { url } = (await res.json()) as PutBlobResult
+            setTimeout(() => {
+              // Code to execute after 30 seconds
+            }, 200000);
+            setVideoLink(url)
+            setVideoTitle(title)
             toast(
               (t: { id: string } 
                 ) => (
@@ -109,7 +115,7 @@ export default function Uploader() {
         <div className="space-y-1 mb-4">
           <h2 className="text-xl font-semibold">Upload a file</h2>
           <p className="text-sm text-gray-500">
-            Accepted formats: .png, .jpg, .gif, .mp4
+            Accepted formats: .mp4
           </p>
         </div>
         <label
@@ -205,9 +211,19 @@ export default function Uploader() {
             id="image-upload"
             name="image"
             type="file"
-            accept="image/*"
+            accept="image/*, video/*"
             className="sr-only"
             onChange={onChangePicture}
+          />
+        </div>
+        <div className="mt-1 flex rounded-md shadow-sm">
+          <input
+            id="video-title"
+            name="video Title"
+            type="text"
+            value={title ?? ''}
+            placeholder='Title'
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setTitle(event.target.value)}
           />
         </div>
       </div>
@@ -220,7 +236,7 @@ export default function Uploader() {
             : 'border-black bg-black text-white hover:bg-white hover:text-black'
         } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
       >
-        {saving ? (
+        {saving && title ? (
           <LoadingDots color="#808080" />
         ) : (
           <p className="text-sm">Confirm upload</p>
