@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import TranscriptCard from './card';
 
 function TranscriptComponent({timestamp}: {timestamp: number}) {
-  const [transcript, setTranscript] = useState(null);
+  const [transcript, setTranscript] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -12,7 +12,7 @@ import VideoPlayer from '../components/player';
 
 const videoUrl = "https://vod-cdn.lp-playback.studio/raw/jxf4iblf6wlsyor6526t4tcmtmqa/catalyst-vod-com/hls/aa49jf2uijrtct3e/index.m3u8"
 export default function Home() {
-  const [transcript, setTranscript] = useState(null);
+  const [transcript, setTranscript] = useState<any>(null);
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch('/api/transcript', {

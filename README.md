@@ -1,3 +1,3 @@
 # Project Title
 
-Sentient Scribe AI
+Sentient Scribe AIp
